@@ -1,0 +1,21 @@
+<h1>Bibilomaniacs</h1>
+
+<h2>Nuestros libros: </h2>
+
+<div id="homeList">
+    {{>card}}
+</div>
+
+
+{{#if hasPrevPage}}
+    <a href="/?page={{prevPage}}">Anterior</a>
+{{/if}}
+
+{{#if hasNextPage}}
+    <a href="/?page={{nextPage}}">Siguiente</a> 
+{{/if}}
+
+<p>Página {{currentPage}} de {{totalPages}} </p>
+
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+<script src="js/main.js"></script>
