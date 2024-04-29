@@ -12,7 +12,7 @@ const PUERTO = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(express.static("./src/public"));
+app.use(express.static("./src/public/"));
 
 app.engine("handlebars", exphbs.engine());
 
@@ -25,9 +25,8 @@ app.use("/api", productsRouter);
 app.use("/api", cartsRouter);
 
 const httpServer = app.listen(PUERTO, () => {
-    console.log(`Escuchando en el puerto http//localhost:${PUERTO}`)
-    
-})
+    console.log(`Escuchando en el puerto http//localhost:${PUERTO}`);
+});
 
 const io = new Server(httpServer);
 const productManager = new ProductManager;
@@ -56,9 +55,4 @@ io.on("connection", async (socket) => {
 
         io.sockets.emit("message", messages)
     });
-
-    socket.on("redirectProductDetail", (productUrl) => {
-        console.log("Redireccionar a: ", productUrl);
-        io.emit("redirectProductDetail", productUrl)
-    })
 });

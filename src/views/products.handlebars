@@ -1,0 +1,18 @@
+<h2>Nuestros libros: </h2>
+
+<div id="homeList">
+    {{>card}}
+</div>
+
+
+{{#if hasPrevPage}}
+    <a href="{{prevLink}}">Anterior</a>
+{{/if}}
+
+{{#if hasNextPage}}
+    <a href="{{nextLink}}">Siguiente</a> 
+{{/if}}
+
+<p>Página {{page}} de {{totalPages}} </p>
+
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>

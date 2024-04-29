@@ -54,4 +54,48 @@ router.post("/carts/:cid/product/:pid", async (req, res) => {
     }
 });
 
+router.put("/carts/:cid", async (req, res) => {
+    try{
+        const id = req.params.cid;
+        const updatedProducts = req.body.products;
+
+        if(!updatedProducts){
+            return res.status(400).send({ error: "El formato de los productos es inválido" });
+        }
+
+        const updatedCart = await cartManager.updateProductInCart(id, updatedProducts);
+
+        if(!updatedCart) {
+            return res.status(404).send({ error: `El carito con ID ${id} no existe` })
+        }
+
+        res.status(200).send({ message: "Produtos del carrito actualizados correctamente" });
+
+    }catch (error) {
+        res.status(500).send({ error: "Error interno del servidor" });
+    }
+})
+
+router.delete("/carts/:cid/product/:pid", async (req, res) => {
+    try{
+        let productId = req.params.pid;
+        let cart = req.params.cid;
+        await cartManager.deleteProductFromCart(cart, productId);
+        res.status(200).send({ message: "Producto eliminado correctamente del carrito" });
+    }catch (error){
+        res.status(500).send({ error: "Erorr interno del servidor" });
+    }
+    
+})
+
+router.delete("/carts/:cid", async (req, res) => {
+    try{
+        let id = req.params.cid;
+        await cartManager.deleteCart(id);
+        res.status(200).send({ message: "Carrito eliminado correctamente" });
+    }catch (error){
+        res.status(500).send({ error: "Erorr interno del servidor" });
+    }
+})
+
 export default router;

@@ -1,12 +1,18 @@
 import express from "express";
 import { Router } from "express";
 import ProductManager from "../controllers/productManager.js";
+import CartManager from "../controllers/cartManager.js";
 import ProductModel from "../models/product.model.js";
 const router = Router();
 const productManager = new ProductManager;
+const cartManager = new CartManager;
 
 
-router.get("/", async (req, res) => {
+router.get("/", async (req,res) => {
+    res.render("home");
+})
+
+router.get("/products", async (req, res) => {
     try{
 
         const page = parseInt(req.query.page) || 1;
@@ -30,17 +36,17 @@ router.get("/", async (req, res) => {
             return {_id, ...rest};
         })
 
-        res.render("home", {
+        res.render("products", {
             status: "success",
             products: librosResultadoFinal,
             totalPages: books.totalPages,
             prevPage: books.prevPage,
             nextPage: books.nextPage,
             page: books.page,
-            hasPrevPage: books.hasPrevPage,
-            hasNextPage: books.hasNextPage,
-            prevLink: books.hasPrevPage ? `/?page=${books.prevPage}&limit=${limit}` : null,
-            nextLink: books.hasNextPage ? `/?page=${books.nextPage}&limit=${limit}` : null
+            hasPrevPage: books.prevPage ? true : false,
+            hasNextPage: books.nextPage ? true : false,
+            prevLink: books.hasPrevPage ? `/products?page=${books.prevPage}&limit=${limit}` : null,
+            nextLink: books.hasNextPage ? `/products?page=${books.nextPage}&limit=${limit}` :  null
         });
 
     }catch (error){
@@ -56,7 +62,7 @@ router.get("/realtimeproducts", async (req, res) => {
     res.render("realtimeproducts");
 });
 
-router.get('/product/:id', async (req, res) => {
+router.get("/products/:id", async (req, res) => {
     const productId = req.params.id;
     try{
         const product = await productManager.getProductById(productId);
@@ -71,5 +77,22 @@ router.get('/product/:id', async (req, res) => {
         res.status(500).send("Error interno del servidor");
     }
 });
+
+router.get("/carts/:cid", async (req, res) => {
+    const cartId = req.params.cid;
+    try{
+        const cart = await cartManager.getCartProducts(cartId);
+
+        if(!cart){
+            return res.status(404).send("Carrito no encontrado");
+        }
+
+        res.render("cart", {cart});
+
+    }catch (error){
+        console.error("Error al obtener el carrito", error);
+        res.status(500).send("Error interno del servidor")
+    }
+})
 
 export default router;
