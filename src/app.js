@@ -6,7 +6,6 @@ import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import ProductManager from "./controllers/productManager.js";
 import MessageModel from "./models/message.model.js";
-import ProductsModel  from "./models/product.model.js";
 import "./database.js";
 const app = express();
 const PUERTO = 8080;
@@ -56,15 +55,10 @@ io.on("connection", async (socket) => {
         const messages = await MessageModel.find();
 
         io.sockets.emit("message", messages)
+    });
+
+    socket.on("redirectProductDetail", (productUrl) => {
+        console.log("Redireccionar a: ", productUrl);
+        io.emit("redirectProductDetail", productUrl)
     })
 });
-
-/* import mongoose from "mongoose";
-
-const enviroment = async() => {
-    await mongoose.connect("mongodb+srv://masocaucota:caucotaAlways@cluster0.obhprab.mongodb.net/Ecommerce?retryWrites=true&w=majority&appName=Cluster0");
-    let response = await ProductsModel.find().explain("executionStats");
-    console.log(response);
-}
-
-enviroment(); */

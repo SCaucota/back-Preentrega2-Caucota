@@ -1,5 +1,9 @@
 const socket = io();
 
+socket.on("products", (data) => {
+    renderProductos(data);
+});
+
 const renderProductos = (products) => {
     const productsContainer = document.getElementById("productsContainer");
     productsContainer.innerHTML = "";
@@ -16,6 +20,10 @@ const renderProductos = (products) => {
                             </div>
                         `
         productsContainer.appendChild(card);
+
+        card.querySelector("button").addEventListener("click", () => {
+            deleteProduct(item._id);
+        });
     });
 };
 
@@ -23,13 +31,7 @@ const deleteProduct = (id) => {
     socket.emit("deleteProduct", id);
 };
 
-const sendButton = document.getElementById("btnSend");
-
-if(sendButton){
-    sendButton.addEventListener("click", () => {
-        addProduct();
-    })
-};
+const sendButton = document.getElementById("btnSend").addEventListener("click", () => addProduct())
 
 const addProduct = () => {
     const product = {

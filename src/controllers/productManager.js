@@ -59,7 +59,8 @@ class ProductManager {
 
     getProductById = async (id) => {
         try {
-            const product = await ProductModel.findById(id);
+            console.log("id en productManager", id)
+            const product = await ProductModel.findById(id).lean();
 
             if (!product) {
                 console.error(`El producto de id "${id}" no existe`);

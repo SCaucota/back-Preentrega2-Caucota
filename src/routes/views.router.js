@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
 
         const librosResultadoFinal = books.docs.map(book => {
             const {_id, ...rest} = book.toObject();
-            return rest;
+            return {_id, ...rest};
         })
 
         res.render("home", {
@@ -43,25 +43,6 @@ router.get("/", async (req, res) => {
             nextLink: books.hasNextPage ? `/?page=${books.nextPage}&limit=${limit}` : null
         });
 
-        /* const dataForRender = {
-            products: librosResultadoFinal,
-            totalPages: books.totalPages,
-            prevPage: books.prevPage,
-            nextPage: books.nextPage,
-            page: books.page,
-            hasPrevPage: books.hasPrevPage,
-            hasNextPage: books.hasNextPage,
-            prevLink: books.hasPrevPage ? `/?page=${books.prevPage}&limit=${limit}` : null,
-            nextLink: books.hasNextPage ? `/?page=${books.nextPage}&limit=${limit}` : null
-        };
-
-        console.log({
-            status: "success",
-            ...dataForRender
-        });
-
-        res.render("home", dataForRender); */
-
     }catch (error){
         res.status(500).json({error: "Error interno del servidor"});
     }
@@ -73,6 +54,22 @@ router.get("/chat", async (req, res) => {
 
 router.get("/realtimeproducts", async (req, res) => {
     res.render("realtimeproducts");
+});
+
+router.get('/product/:id', async (req, res) => {
+    const productId = req.params.id;
+    try{
+        const product = await productManager.getProductById(productId);
+
+        if(!product){
+            return res.status(404).send("Producto no encontrado");
+        }
+
+        res.render('product', { product });
+    }catch (error){
+        console.error("Error al obtener el producto", error);
+        res.status(500).send("Error interno del servidor");
+    }
 });
 
 export default router;
