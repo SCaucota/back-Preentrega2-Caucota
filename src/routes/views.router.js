@@ -38,7 +38,7 @@ router.get("/products", async (req, res) => {
 
         res.render("products", {
             status: "success",
-            products: librosResultadoFinal,
+            payload: librosResultadoFinal,
             totalPages: books.totalPages,
             prevPage: books.prevPage,
             nextPage: books.nextPage,

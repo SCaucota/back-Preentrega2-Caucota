@@ -42,6 +42,8 @@ class cartManager {
             cart.markModified("products");
 
             await cart.save();
+
+            console.log("carrito al agregar productos", cart)
             console.log(`Producto con ID "${productId}" agregado al carrito con ID ${cartId}`);
         } catch (error) {
             console.log("Error al agregar el producto al carrito", error);

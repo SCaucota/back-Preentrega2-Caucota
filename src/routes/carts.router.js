@@ -105,7 +105,7 @@ router.delete("/carts/:cid", async (req, res) => {
     try {
         let id = req.params.cid;
         await cartManager.deleteProductsCart(id);
-        res.status(200).send({ message: "Carrito eliminado correctamente" });
+        res.status(200).send({ message: "El carrito se vació correctamente" });
     } catch (error) {
         res.status(500).send({ error: "Erorr interno del servidor" });
     }

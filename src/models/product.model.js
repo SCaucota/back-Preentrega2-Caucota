@@ -36,22 +36,6 @@ const productSchema = new mongoose.Schema({
     }
 });
 
-/* const populateId = function(next) {
-    this.populate("_id");
-    next();
-} */
-
-productSchema.pre("find", function(){
-    this.populate("category");
-})
-
-productSchema.pre("findById", function(){
-    this.populate("_id")
-})
-/* productSchema.pre("findById", populateId);
-productSchema.pre("findByIdAndUpdate", populateId);
-productSchema.pre("findByIdAndDelete", populateId); */
-
 productSchema.plugin(mongoosePaginate);
 
 const ProductModel = mongoose.model("products", productSchema);
