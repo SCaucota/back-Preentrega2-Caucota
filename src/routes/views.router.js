@@ -45,8 +45,8 @@ router.get("/products", async (req, res) => {
             page: books.page,
             hasPrevPage: books.prevPage ? true : false,
             hasNextPage: books.nextPage ? true : false,
-            prevLink: books.hasPrevPage ? `/products?page=${books.prevPage}&limit=${limit}` : null,
-            nextLink: books.hasNextPage ? `/products?page=${books.nextPage}&limit=${limit}` :  null
+            prevLink: books.hasPrevPage ? `/products?page=${books.prevPage}&limit=${limit}&sort=${req.query.sort || ''}&type=${req.query.type || ''}` : null,
+            nextLink: books.hasNextPage ? `/products?page=${books.nextPage}&limit=${limit}&sort=${req.query.sort || ''}&type=${req.query.type || ''}` : null,
         });
 
     }catch (error){
